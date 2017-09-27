@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CreditScore.Models;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace CreditScore
 {
@@ -16,6 +21,9 @@ namespace CreditScore
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+
+        private const string InChannel = "Databasserne_CreditScoreIn";
+        private const string OutChannel = "Databasserne_CreditScoreOut";
 
         public override void Run()
         {
@@ -60,11 +68,47 @@ namespace CreditScore
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: Replace the following with your own logic.
-            while (!cancellationToken.IsCancellationRequested)
+            var factory = new ConnectionFactory()
             {
-                Trace.TraceInformation("Working");
-                await Task.Delay(1000);
+                HostName = "datdb.cphbusiness.dk",
+                UserName = "student",
+                Password = "cph"
+            };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: InChannel,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += (model, ea) =>
+                {
+                    var body = ea.Body;
+                    var input = JsonConvert.DeserializeObject<Input>(Encoding.UTF8.GetString(body));
+
+                    Trace.TraceInformation($"Input: {input}");
+
+                    var css = new CreditScoreWebService.CreditScoreService();
+
+                    var creditScore = css.creditScore(input.SSN);
+                    var output = new Output(input, creditScore);
+
+                    Trace.TraceInformation($"Output: {output}");
+
+
+                    var bodyOut = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(output));
+
+                    channel.BasicPublish("", OutChannel, null, bodyOut);
+                };
+                channel.BasicConsume(queue: InChannel,
+                    noAck: true,
+                    consumer: consumer);
+
+                while (!cancellationToken.IsCancellationRequested) { }
             }
         }
     }
