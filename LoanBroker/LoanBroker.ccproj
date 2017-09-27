@@ -37,6 +37,14 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BankRouter\BankRouter.csproj">
+      <Name>BankRouter</Name>
+      <Project>{a494b358-a59c-455e-ba70-2b27e8a94532}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>BankRouter</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\CreditScore\CreditScore.csproj">
       <Name>CreditScore</Name>
       <Project>{14e5167f-b495-4fd0-96a7-e96ae0b4baa2}</Project>
@@ -47,9 +55,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BankRouterContent\" />
     <Folder Include="CreditScoreContent\" />
   </ItemGroup>
   <ItemGroup>
+    <DiagnosticsConfiguration Include="BankRouterContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="CreditScoreContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->

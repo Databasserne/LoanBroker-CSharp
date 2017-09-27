@@ -7,6 +7,8 @@ Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "LoanBroker", "LoanBroker\Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditScore", "CreditScore\CreditScore.csproj", "{14E5167F-B495-4FD0-96A7-E96AE0B4BAA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankRouter", "BankRouter\BankRouter.csproj", "{A494B358-A59C-455E-BA70-2B27E8A94532}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{14E5167F-B495-4FD0-96A7-E96AE0B4BAA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14E5167F-B495-4FD0-96A7-E96AE0B4BAA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14E5167F-B495-4FD0-96A7-E96AE0B4BAA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A494B358-A59C-455E-BA70-2B27E8A94532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A494B358-A59C-455E-BA70-2B27E8A94532}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A494B358-A59C-455E-BA70-2B27E8A94532}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A494B358-A59C-455E-BA70-2B27E8A94532}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
