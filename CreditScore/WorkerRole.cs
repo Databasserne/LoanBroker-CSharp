@@ -99,7 +99,6 @@ namespace CreditScore
 
                     Trace.TraceInformation($"Output: {output}");
 
-
                     var bodyOut = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(output));
 
                     channel.BasicPublish("", OutChannel, null, bodyOut);
