@@ -92,6 +92,13 @@ namespace BankRouter
                     var input = JsonConvert.DeserializeObject<Input>(Encoding.UTF8.GetString(body));
 
                     Trace.TraceInformation($"Input: {input}");
+
+                    var bodyOut = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new Output(input)));
+
+                    foreach (var bank in input.Banks)
+                    {
+                        channel.BasicPublish("", $"{OutChannel}_{bank}", null, bodyOut);
+                    }
                 };
 
                 channel.BasicConsume(queue: InChannel,
