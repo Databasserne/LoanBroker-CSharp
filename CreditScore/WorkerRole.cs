@@ -23,7 +23,7 @@ namespace CreditScore
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
 
         private const string InChannel = "Databasserne_CreditScoreIn";
-        private const string OutChannel = "Databasserne_CreditScoreOut";
+        private const string OutChannel = "Databasserne_RuleBankIn";
 
         public override void Run()
         {

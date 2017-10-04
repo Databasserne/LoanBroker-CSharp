@@ -22,8 +22,7 @@ namespace BankRouter
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
 
-        private const string InChannel = "Databasserne_BankRouterIn";
-        private const string OutChannel = "Databasserne_BankRouterOut";
+        private const string InChannel = "Databasserne_RuleBankOut";
 
 
         public override void Run()
@@ -89,16 +88,23 @@ namespace BankRouter
                 consumer.Received += (model, ea) =>
                 {
                     var body = ea.Body;
-                    var input = JsonConvert.DeserializeObject<Input>(Encoding.UTF8.GetString(body));
+                    var stringBody = Encoding.UTF8.GetString(body);
+                    Trace.TraceInformation($"String input: {stringBody}");
+                    var input = JsonConvert.DeserializeObject<Input>(stringBody);
 
                     Trace.TraceInformation($"Input: {input}");
 
                     var bodyOut = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new Output(input)));
 
+                    channel.ExchangeDeclare(exchange: "Databasserne_Test",
+                        type: "direct");
+
                     foreach (var bank in input.Banks)
                     {
-                        channel.BasicPublish("", $"{OutChannel}_{bank}", null, bodyOut);
+                        channel.BasicPublish(exchange: "Databasserne_Test", routingKey: bank, basicProperties: null, body: bodyOut);
                     }
+
+                    Console.WriteLine("Sent output");
                 };
 
                 channel.BasicConsume(queue: InChannel,
