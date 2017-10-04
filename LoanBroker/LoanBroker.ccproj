@@ -45,6 +45,14 @@
       <RoleName>BankRouter</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
+    <ProjectReference Include="..\BankSOAP\BankSOAP.csproj">
+      <Name>BankSOAP</Name>
+      <Project>{44b03f58-958c-41cf-a08c-71d9f00754ed}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>BankSOAP</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\CreditScore\CreditScore.csproj">
       <Name>CreditScore</Name>
       <Project>{14e5167f-b495-4fd0-96a7-e96ae0b4baa2}</Project>
@@ -60,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="BankRouterContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="BankSOAPContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="CreditScoreContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
