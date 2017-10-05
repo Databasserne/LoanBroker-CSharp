@@ -61,15 +61,26 @@
       <RoleName>CreditScore</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
+    <ProjectReference Include="..\TranslatorBankSOAP\TranslatorBankSOAP.csproj">
+      <Name>TranslatorBankSOAP</Name>
+      <Project>{14f937ef-b09d-4acf-a8e3-5884b34fed7a}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>TranslatorBankSOAP</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BankRouterContent\" />
+    <Folder Include="BankSOAPContent\" />
     <Folder Include="CreditScoreContent\" />
+    <Folder Include="TranslatorBankSOAPContent\" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="BankRouterContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="BankSOAPContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="CreditScoreContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="TranslatorBankSOAPContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
