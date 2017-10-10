@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BankSOAP;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -71,10 +72,11 @@ namespace TranslatorBankSOAP
                 Password = "cph"
             };
 
+            var bank = new BankService();
+
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                
                 while (!cancellationToken.IsCancellationRequested)
                 {
                 }
