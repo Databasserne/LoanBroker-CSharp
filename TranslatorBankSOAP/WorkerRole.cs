@@ -97,6 +97,8 @@ namespace TranslatorBankSOAP
                     var output = new Output(input, rate);
                     Trace.TraceInformation($"Created output: {output}");
 
+                    channel.BasicPublish("", "Databasserne_BankSOAPOut" , null, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(output)));
+
                     Trace.TraceInformation("Request sent");
                     Trace.TraceInformation("------------------------------");
 
