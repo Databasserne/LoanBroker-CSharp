@@ -14,6 +14,7 @@ using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using TranslatorBankSOAP.Models;
 
 namespace TranslatorBankSOAP
 {
@@ -77,6 +78,36 @@ namespace TranslatorBankSOAP
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
+                channel.ExchangeDeclare(exchange: "Databasserne_Test", type: "direct");
+                var queName = channel.QueueDeclare().QueueName;
+
+                channel.QueueBind(queName, "Databasserne_Test", "BankSOAP");
+                
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += (model, ea) =>
+                {
+                    var input = JsonConvert.DeserializeObject<Input>(Encoding.UTF8.GetString(ea.Body));
+
+                    Trace.TraceInformation($"Got request: {input}");
+                    Trace.TraceInformation("Proccesing request...");
+
+                    var rate = bank.GetIntrestRate(input.CreditScore, input.Months, input.Amount);
+                    Trace.TraceInformation($"Got rate: {rate}");
+
+                    var output = new Output(input, rate);
+                    Trace.TraceInformation($"Created output: {output}");
+
+                    Trace.TraceInformation("Request sent");
+                    Trace.TraceInformation("------------------------------");
+
+                };
+                channel.BasicConsume(queue: queName,
+                    noAck: true,
+                    consumer: consumer);
+
+
+                Trace.TraceInformation("Waiting for requests...");
+
                 while (!cancellationToken.IsCancellationRequested)
                 {
                 }
