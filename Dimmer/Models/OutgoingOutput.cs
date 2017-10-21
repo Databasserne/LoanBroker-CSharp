@@ -10,9 +10,12 @@ namespace Dimmer.Models
     {
         public OutgoingOutput(OutgoingInput input)
         {
-            this.Rate = input.Rate;
+            this.InterestRate = input.InterestRate;
+            this.BankName = input.Bank;
         }
 
-        public double Rate { get; set; }
+        public double InterestRate { get; set; }
+
+        public string BankName { get; set; }
     }
 }

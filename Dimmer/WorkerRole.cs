@@ -101,7 +101,7 @@ namespace Dimmer
                 {
                     var body = ea.Body;
                     var input = JsonConvert.DeserializeObject<Ingoing>(Encoding.UTF8.GetString(body));
-
+                    Trace.TraceInformation($"Input: {input}");
                     if (_stuff.ContainsKey(input.SSN))
                     {
                         _stuff[input.SSN].Add(ea.BasicProperties.ReplyTo);
@@ -130,6 +130,7 @@ namespace Dimmer
                             channel.BasicPublish("", replyQueue, null, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(output)));
                         }
 
+                        Trace.TraceInformation($"Finished finding load rates for SSN {input.SSN}, best rate is {output.InterestRate} in {output.BankName}" );
                         _stuff.Remove(input.SSN);
                     }
                     else

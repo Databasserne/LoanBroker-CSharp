@@ -37,6 +37,14 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aggragator\Aggragator.csproj">
+      <Name>Aggragator</Name>
+      <Project>{022b823e-e442-4765-8294-aec7b18e866e}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>Aggragator</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\BankRouter\BankRouter.csproj">
       <Name>BankRouter</Name>
       <Project>{a494b358-a59c-455e-ba70-2b27e8a94532}</Project>
@@ -79,6 +87,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AggragatorContent\" />
+    <Folder Include="AggregatorContent\" />
     <Folder Include="BankRouterContent\" />
     <Folder Include="BankSOAPContent\" />
     <Folder Include="CreditScoreContent\" />
@@ -86,6 +96,8 @@
     <Folder Include="TranslatorBankSOAPContent\" />
   </ItemGroup>
   <ItemGroup>
+    <DiagnosticsConfiguration Include="AggragatorContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="AggregatorContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="BankRouterContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="BankSOAPContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="CreditScoreContent\diagnostics.wadcfgx" />

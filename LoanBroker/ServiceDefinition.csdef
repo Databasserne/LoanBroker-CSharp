@@ -35,4 +35,9 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
+  <WorkerRole name="Aggragator" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>

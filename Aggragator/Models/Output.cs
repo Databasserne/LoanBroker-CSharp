@@ -5,26 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace TranslatorBankSOAP.Models
+namespace Aggragator.Models
 {
     public class Output
     {
-        public Output(Input input, double intrestRate)
+        public Output(Input input)
         {
             this.SSN = input.SSN;
-            this.IntrestRate = intrestRate;
+            this.InterestRate = input.InterestRate;
+            this.Bank = input.Bank;
         }
 
         // ReSharper disable once InconsistentNaming
-        [JsonProperty("ssn")]
         public string SSN { get; set; }
 
-        [JsonProperty("interestRate")]
-        public double IntrestRate { get; set; }
+        public double InterestRate { get; set; }
+
+        public string Bank { get; set; }
 
         public override string ToString()
         {
-            return $"SSN: {SSN} - Rate: {IntrestRate}";
+            return $"SSN: {SSN} - Rate: {InterestRate} - Bank: {Bank}";
         }
     }
 }

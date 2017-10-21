@@ -6,7 +6,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BankSOAP;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -14,19 +13,20 @@ using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RabbitMQ.Client.Framing;
-using TranslatorBankSOAP.Models;
 
-namespace TranslatorBankSOAP
+namespace Aggregator
 {
     public class WorkerRole : RoleEntryPoint
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
 
+        private const string InChannel = "Databasserne_Aggregator";
+        private const string OutChannel = "Databasserne_DimmerOut";
+
         public override void Run()
         {
-            Trace.TraceInformation("TranslatorBankSOAP is running");
+            Trace.TraceInformation("Aggregator is running");
 
             try
             {
@@ -48,21 +48,21 @@ namespace TranslatorBankSOAP
 
             bool result = base.OnStart();
 
-            Trace.TraceInformation("TranslatorBankSOAP has been started");
+            Trace.TraceInformation("Aggregator has been started");
 
             return result;
         }
 
         public override void OnStop()
         {
-            Trace.TraceInformation("TranslatorBankSOAP is stopping");
+            Trace.TraceInformation("Aggregator is stopping");
 
             this.cancellationTokenSource.Cancel();
             this.runCompleteEvent.WaitOne();
 
             base.OnStop();
 
-            Trace.TraceInformation("TranslatorBankSOAP has stopped");
+            Trace.TraceInformation("Aggregator has stopped");
         }
 
         private async Task RunAsync(CancellationToken cancellationToken)
@@ -74,48 +74,27 @@ namespace TranslatorBankSOAP
                 Password = "cph"
             };
 
-            var bank = new BankService();
-
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare(exchange: "Databasserne_Test", type: "direct");
-                var queName = channel.QueueDeclare().QueueName;
+                channel.QueueDeclare(queue: InChannel,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
 
-                channel.QueueBind(queName, "Databasserne_Test", "BankSOAP");
-                
                 var consumer = new EventingBasicConsumer(channel);
                 consumer.Received += (model, ea) =>
                 {
-                    var input = JsonConvert.DeserializeObject<Input>(Encoding.UTF8.GetString(ea.Body));
-
-                    Trace.TraceInformation($"Got request: {input}");
-                    Trace.TraceInformation("Proccesing request...");
-
-                    var rate = bank.GetIntrestRate(input.CreditScore, input.Months, input.Amount);
-                    Trace.TraceInformation($"Got rate: {rate}");
-
-                    var output = new Output(input, rate);
-                    Trace.TraceInformation($"Created output: {output}");
+                    var body = ea.Body;
                     
-                    var props = new BasicProperties();
-                    props.CorrelationId = "BankSOAP";
-                    channel.BasicPublish("", "Databasserne_Normalizer" , props, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(output)));
-
-                    Trace.TraceInformation("Request sent");
-                    Trace.TraceInformation("------------------------------");
-
+                    Trace.TraceInformation($"Input: {body}");
                 };
-                channel.BasicConsume(queue: queName,
+                channel.BasicConsume(queue: InChannel,
                     noAck: true,
                     consumer: consumer);
 
-
-                Trace.TraceInformation("Waiting for requests...");
-
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                }
+                while (!cancellationToken.IsCancellationRequested) { }
             }
         }
     }

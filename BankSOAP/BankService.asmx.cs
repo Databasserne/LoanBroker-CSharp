@@ -20,7 +20,7 @@ namespace BankSOAP
         [WebMethod]
         public double GetIntrestRate(int creditScore, int months, double ammount)
         {
-            return 4.7;
+            return 2.5;
         }
     }
 }

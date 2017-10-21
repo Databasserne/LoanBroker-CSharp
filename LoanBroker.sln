@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "LoanBroker", "LoanBroker\LoanBroker.ccproj", "{A0B23E3A-42B8-496B-A4C9-D1474367E0E2}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Translators", "Translators", "{28A547E3-D94A-4847-8130-8B88407137DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dimmer", "Dimmer\Dimmer.csproj", "{D4D0D727-01D9-4374-9663-7BF01195781D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aggragator", "Aggragator\Aggragator.csproj", "{022B823E-E442-4765-8294-AEC7B18E866E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{D4D0D727-01D9-4374-9663-7BF01195781D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4D0D727-01D9-4374-9663-7BF01195781D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4D0D727-01D9-4374-9663-7BF01195781D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{022B823E-E442-4765-8294-AEC7B18E866E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{022B823E-E442-4765-8294-AEC7B18E866E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{022B823E-E442-4765-8294-AEC7B18E866E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{022B823E-E442-4765-8294-AEC7B18E866E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
