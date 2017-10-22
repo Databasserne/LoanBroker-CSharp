@@ -20,7 +20,7 @@ namespace BankSOAP
         [WebMethod]
         public double GetIntrestRate(int creditScore, int months, double ammount)
         {
-            return 2.5;
+            return new Random().NextDouble() * 4 + 2;
         }
     }
 }

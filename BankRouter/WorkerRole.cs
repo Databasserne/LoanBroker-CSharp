@@ -23,6 +23,7 @@ namespace BankRouter
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
 
         private const string InChannel = "Databasserne_RuleBankOut";
+        private const string DimmerChannel = "Databasserne_DimmerOut";
 
 
         public override void Run()
@@ -94,17 +95,26 @@ namespace BankRouter
 
                     Trace.TraceInformation($"Input: {input}");
 
-                    var bodyOut = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new Output(input)));
-
-                    channel.ExchangeDeclare(exchange: "Databasserne_Test",
-                        type: "direct");
-
-                    foreach (var bank in input.Banks)
+                    if (input.Banks.Length <= 0)
                     {
-                        channel.BasicPublish(exchange: "Databasserne_Test", routingKey: bank, basicProperties: null, body: bodyOut);
-                    }
+                        Trace.TraceInformation("No banks found, sent to dimmer");
 
-                    Console.WriteLine("Sent output");
+                        channel.BasicPublish("", DimmerChannel, null, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new DimmerModel(input))));
+                    }
+                    else
+                    {
+                        var bodyOut = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new Output(input)));
+
+                        channel.ExchangeDeclare(exchange: "Databasserne_Test",
+                            type: "direct");
+
+                        foreach (var bank in input.Banks)
+                        {
+                            channel.BasicPublish(exchange: "Databasserne_Test", routingKey: bank, basicProperties: null, body: bodyOut);
+                        }
+
+                        Trace.TraceInformation("Sent output to banks");
+                    }
                 };
 
                 channel.BasicConsume(queue: InChannel,
